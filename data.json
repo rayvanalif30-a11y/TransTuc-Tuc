@@ -1,0 +1,194 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "nama": "Admin TucTuc",
+      "nim": "ADMIN001",
+      "password": "$2a$10$1XBMW8lPKALz4k5SmP.2J.7l9bu6u7HYn3qHOEY6.Vn55cDeM28sW",
+      "faculty": "Administrator",
+      "role": "admin",
+      "created_at": "2025-12-22T06:52:43.587Z"
+    },
+    {
+      "id": 2,
+      "nama": "Demo User",
+      "nim": "1234567890",
+      "password": "$2a$10$XouaUAqDn7QD687Kh45BU.4ABI2UHa6uM.2fc6gyZLZDEiW.MG77a",
+      "faculty": "Fakultas Informatika",
+      "role": "mahasiswa",
+      "created_at": "2025-12-22T06:52:43.723Z"
+    },
+    {
+      "id": 3,
+      "nama": "rayvan",
+      "nim": "1010",
+      "password": "$2a$10$B64L/PfbdX7fW5sV/xlui.7ws8Wv9aMxyN0aYDEyRyToI16W0ZEMi",
+      "faculty": "Fakultas Informatika",
+      "role": "mahasiswa",
+      "created_at": "2025-12-22T06:53:17.106Z"
+    },
+    {
+      "id": 4,
+      "nama": "Rayvan Alifarlo Mahesworo",
+      "nim": "rayvanalifarlo@student.telkomuniversity.ac.id",
+      "password": "$2a$10$2LcLPn5fnwwhvpVWXyfjvuYhmEVlow8/Vge25lx14GOH66hENUeIC",
+      "faculty": "Fakultas Informatika",
+      "role": "mahasiswa",
+      "created_at": "2025-12-22T10:15:27.720Z"
+    },
+    {
+      "id": 5,
+      "nama": "Rayvan Alifarlo Mahesworo",
+      "nim": "rayvanalif30@gmail.com",
+      "password": "$2a$10$McMzsqOjt8b3CryJRShbmOHVsVqDyki4nWTjdpIiZqVBT44uKH0A.",
+      "faculty": "Fakultas Informatika",
+      "role": "mahasiswa",
+      "created_at": "2025-12-23T13:52:33.221Z"
+    }
+  ],
+  "schedules": [
+    {
+      "id": 1,
+      "time": "06:00",
+      "period": "AM",
+      "halte": "Gedung Telkom",
+      "vehicle": "TucTuc #01",
+      "status": "available"
+    },
+    {
+      "id": 2,
+      "time": "06:15",
+      "period": "AM",
+      "halte": "Sukabirus",
+      "vehicle": "TucTuc #02",
+      "status": "available"
+    },
+    {
+      "id": 3,
+      "time": "06:30",
+      "period": "AM",
+      "halte": "Yogya Sukapura",
+      "vehicle": "TucTuc #01",
+      "status": "arriving"
+    },
+    {
+      "id": 4,
+      "time": "06:45",
+      "period": "AM",
+      "halte": "Gedung Telkom",
+      "vehicle": "TucTuc #03",
+      "status": "available"
+    },
+    {
+      "id": 5,
+      "time": "07:00",
+      "period": "AM",
+      "halte": "MB Tel-U",
+      "vehicle": "TucTuc #01",
+      "status": "full"
+    },
+    {
+      "id": 6,
+      "time": "07:15",
+      "period": "AM",
+      "halte": "Jalan Raya",
+      "vehicle": "TucTuc #02",
+      "status": "available"
+    },
+    {
+      "id": 7,
+      "time": "07:30",
+      "period": "AM",
+      "halte": "Sukapura",
+      "vehicle": "TucTuc #03",
+      "status": "available"
+    },
+    {
+      "id": 8,
+      "time": "07:45",
+      "period": "AM",
+      "halte": "Gedung Telkom",
+      "vehicle": "TucTuc #01",
+      "status": "arriving"
+    },
+    {
+      "id": 9,
+      "time": "08:00",
+      "period": "AM",
+      "halte": "Gerbang Tel-U",
+      "vehicle": "TucTuc #02",
+      "status": "available"
+    },
+    {
+      "id": 10,
+      "time": "08:15",
+      "period": "AM",
+      "halte": "Sukabirus",
+      "vehicle": "TucTuc #01",
+      "status": "available"
+    }
+  ],
+  "vehicles": [
+    {
+      "id": 1,
+      "name": "TucTuc #01",
+      "status": "online",
+      "current_halte": "Sukabirus",
+      "passengers": 8,
+      "lat": -6.9768,
+      "lng": 107.6265
+    },
+    {
+      "id": 2,
+      "name": "TucTuc #02",
+      "status": "online",
+      "current_halte": "Gedung Telkom",
+      "passengers": 12,
+      "lat": -6.9733,
+      "lng": 107.6307
+    },
+    {
+      "id": 3,
+      "name": "TucTuc #03",
+      "status": "online",
+      "current_halte": "Yogya Sukapura",
+      "passengers": 4,
+      "lat": -6.9772,
+      "lng": 107.6335
+    }
+  ],
+  "trips": [
+    {
+      "id": 1,
+      "user_id": 2,
+      "vehicle": "TucTuc #02",
+      "halte_from": "Gedung Telkom",
+      "halte_to": "Sukabirus",
+      "trip_date": "2025-12-22T06:52:43.723Z"
+    },
+    {
+      "id": 2,
+      "user_id": 2,
+      "vehicle": "TucTuc #01",
+      "halte_from": "Sukapura",
+      "halte_to": "Gedung Telkom",
+      "trip_date": "2025-12-22T06:52:43.723Z"
+    },
+    {
+      "id": 3,
+      "user_id": 2,
+      "vehicle": "TucTuc #03",
+      "halte_from": "MB Tel-U",
+      "halte_to": "Yogya Sukapura",
+      "trip_date": "2025-12-22T06:52:43.723Z"
+    },
+    {
+      "id": 4,
+      "user_id": 4,
+      "vehicle": "TucTuc #01",
+      "halte_from": "Yogya Sukapura",
+      "halte_to": "Gedung Telkom",
+      "trip_date": "2025-12-22T10:27:13.373Z"
+    }
+  ]
+}

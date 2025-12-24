@@ -1,0 +1,22 @@
+{
+  "name": "tuctuc-telu-backend",
+  "version": "1.0.0",
+  "description": "Backend server untuk aplikasi TucTuc Tel-U",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "bcryptjs": "^2.4.3"
+  },
+  "keywords": [
+    "tuctuc",
+    "telkom",
+    "transportation"
+  ],
+  "author": "Mahasiswa Tel-U",
+  "license": "MIT"
+}

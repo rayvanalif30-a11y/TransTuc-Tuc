@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TucTuc Tel-U - Transportasi Kampus</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="app-container">
+
+        <!-- Splash Screen -->
+        <div id="splash-screen" class="screen active">
+            <div class="splash-content">
+                <div class="logo-container">
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="50" cy="50" r="45" fill="url(#gradient1)" />
+                            <path d="M30 55 L40 35 L60 35 L70 55 L65 60 L35 60 Z" fill="white" />
+                            <circle cx="38" cy="62" r="6" fill="#333" />
+                            <circle cx="62" cy="62" r="6" fill="#333" />
+                            <rect x="42" y="40" width="16" height="10" rx="2" fill="rgba(255,255,255,0.3)" />
+                            <defs>
+                                <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#e31837" />
+                                    <stop offset="100%" style="stop-color:#b01030" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <h1 class="app-title">TucTuc Tel-U</h1>
+                    <p class="app-tagline">Transportasi Kampus Telkom University</p>
+                </div>
+                <div class="splash-loader">
+                    <div class="loader-bar"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login Screen -->
+        <div id="login-screen" class="screen">
+            <div class="login-header">
+                <div class="login-logo">
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="45" fill="url(#gradient2)" />
+                        <path d="M30 55 L40 35 L60 35 L70 55 L65 60 L35 60 Z" fill="white" />
+                        <circle cx="38" cy="62" r="6" fill="#333" />
+                        <circle cx="62" cy="62" r="6" fill="#333" />
+                        <defs>
+                            <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#e31837" />
+                                <stop offset="100%" style="stop-color:#b01030" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <h2>Selamat Datang</h2>
+                <p>Akses layanan TucTuc Tel-U</p>
+            </div>
+
+            <!-- Auth Tabs -->
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="signin-tab" onclick="switchAuthTab('signin')">Sign In</button>
+                <button class="auth-tab" id="signup-tab" onclick="switchAuthTab('signup')">Sign Up</button>
+            </div>
+
+            <!-- Sign In Form -->
+            <form id="signin-form" class="login-form auth-form active">
+                <div class="input-group">
+                    <label for="signin-email">Email</label>
+                    <div class="input-wrapper">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                            <polyline points="22,6 12,13 2,6" />
+                        </svg>
+                        <input type="email" id="signin-email" placeholder="Masukkan Email" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="signin-password">Password</label>
+                    <div class="input-wrapper">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg>
+                        <input type="password" id="signin-password" placeholder="Masukkan Password" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword('signin-password')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="remember-forgot">
+                    <label class="checkbox-wrapper">
+                        <input type="checkbox" id="remember">
+                        <span class="checkmark"></span>
+                        <span>Ingat saya</span>
+                    </label>
+                    <a href="#" class="forgot-link">Lupa Password?</a>
+                </div>
+
+                <button type="submit" class="btn-primary">
+                    <span>Sign In</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </form>
+
+            <!-- Sign Up Form -->
+            <form id="signup-form" class="login-form auth-form">
+                <div class="input-group">
+                    <label for="signup-nama">Nama Lengkap</label>
+                    <div class="input-wrapper">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                        <input type="text" id="signup-nama" placeholder="Masukkan Nama Lengkap" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="signup-email">Email</label>
+                    <div class="input-wrapper">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                            <polyline points="22,6 12,13 2,6" />
+                        </svg>
+                        <input type="email" id="signup-email" placeholder="Masukkan Email" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="signup-password">Password</label>
+                    <div class="input-wrapper">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg>
+                        <input type="password" id="signup-password" placeholder="Buat Password" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword('signup-password')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="signup-confirm">Konfirmasi Password</label>
+                    <div class="input-wrapper">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg>
+                        <input type="password" id="signup-confirm" placeholder="Ulangi Password" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary">
+                    <span>Sign Up</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="8.5" cy="7" r="4" />
+                        <line x1="20" y1="8" x2="20" y2="14" />
+                        <line x1="23" y1="11" x2="17" y2="11" />
+                    </svg>
+                </button>
+            </form>
+
+            <div class="login-footer">
+                <p>Dengan login, Anda menyetujui</p>
+                <a href="#">Syarat & Ketentuan</a>
+            </div>
+
+            <div class="admin-login-link">
+                <button type="button" onclick="showAdminLogin()" class="btn-text">
+                    Login sebagai Admin
+                </button>
+            </div>
+        </div>
+
+        <!-- Main App Screen -->
+        <div id="main-screen" class="screen">
+            <!-- Header -->
+            <header class="main-header">
+                <div class="header-left">
+                    <div class="user-avatar" onclick="navigateTo('profile')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                    </div>
+                    <div class="header-greeting">
+                        <span class="greeting-text">Selamat Datang,</span>
+                        <span class="user-name" id="user-name">Mahasiswa</span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="notification-btn" onclick="showNotifications()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                        </svg>
+                        <span class="notification-badge">2</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Status Card -->
+            <div class="status-card">
+                <div class="status-info">
+                    <div class="tuctuc-status">
+                        <span class="status-dot active"></span>
+                        <span>TucTuc sedang beroperasi</span>
+                    </div>
+                    <div class="next-arrival">
+                        <span class="label">TucTuc terdekat:</span>
+                        <span class="time" id="eta-time">3 menit</span>
+                    </div>
+                </div>
+                <div class="status-route">
+                    <span class="route-label">Halte terdekat:</span>
+                    <span class="route-name" id="nearest-halte">Gedung Telkom</span>
+                </div>
+            </div>
+
+            <!-- Map Container -->
+            <div class="map-section">
+                <div id="map"></div>
+                <div class="map-overlay">
+                    <button class="locate-btn" onclick="centerMap()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <circle cx="12" cy="12" r="3" />
+                            <path d="M12 2v2M12 20v2M2 12h2M20 12h2" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="map-legend">
+                    <div class="legend-item">
+                        <span class="legend-icon halte"></span>
+                        <span>Halte</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-icon tuctuc"></span>
+                        <span>TucTuc</span>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- Bottom Navigation -->
+            <nav class="bottom-nav">
+                <button class="nav-item active" data-page="home" onclick="switchTab('home')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                        <polyline points="9 22 9 12 15 12 15 22" />
+                    </svg>
+                    <span>Beranda</span>
+                </button>
+                <button class="nav-item" data-page="schedule" onclick="switchTab('schedule')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                        <line x1="16" y1="2" x2="16" y2="6" />
+                        <line x1="8" y1="2" x2="8" y2="6" />
+                        <line x1="3" y1="10" x2="21" y2="10" />
+                    </svg>
+                    <span>Jadwal</span>
+                </button>
+
+                <button class="nav-item" data-page="route" onclick="switchTab('route')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="10" r="3" />
+                        <path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 7 8 11.7z" />
+                    </svg>
+                    <span>Rute</span>
+                </button>
+                <button class="nav-item" data-page="profile" onclick="switchTab('profile')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                    </svg>
+                    <span>Profil</span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- Schedule Page -->
+        <div id="schedule-page" class="page">
+            <header class="page-header">
+                <button class="back-btn" onclick="goBack()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <h1>Jadwal Keberangkatan</h1>
+                <div class="header-spacer"></div>
+            </header>
+
+            <div class="page-content">
+                <div class="schedule-filter">
+                    <select id="halte-filter" onchange="filterSchedule()">
+                        <option value="all">Semua Halte</option>
+                        <option value="gedung-telkom">Gedung Telkom</option>
+                        <option value="mb-telu">MB Tel-U</option>
+                        <option value="sukabirus">Sukabirus</option>
+                        <option value="jalan-raya">Jalan Raya</option>
+                        <option value="yogya-sukapura">Yogya Sukapura</option>
+                        <option value="sukapura">Sukapura</option>
+                        <option value="gerbang-telu">Gerbang Tel-U</option>
+                    </select>
+                </div>
+
+                <div class="schedule-list" id="schedule-list">
+                    <!-- Schedule items will be generated by JS -->
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Route Page -->
+        <div id="route-page" class="page">
+            <header class="page-header">
+                <button class="back-btn" onclick="goBack()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <h1>Informasi Rute</h1>
+                <div class="header-spacer"></div>
+            </header>
+
+            <div class="page-content">
+                <div class="route-info-card">
+                    <h3>Rute TucTuc Tel-U</h3>
+                    <p>Jalur melingkar yang menghubungkan area kampus dengan sekitarnya</p>
+                </div>
+
+                <div class="route-timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-marker start"></div>
+                        <div class="timeline-content">
+                            <h4>Gedung Telkom</h4>
+                            <p>Titik awal - Area utama kampus</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <h4>MB Tel-U</h4>
+                            <p>Gedung Manajemen Bisnis</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <h4>Sukabirus</h4>
+                            <p>Jl. Sukabirus - Area kost mahasiswa</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <h4>Jalan Raya</h4>
+                            <p>Persimpangan jalan utama</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <h4>Yogya Sukapura</h4>
+                            <p>Dekat Supermarket Yogya</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <h4>Sukapura</h4>
+                            <p>Jl. Sukapura</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker end"></div>
+                        <div class="timeline-content">
+                            <h4>Gerbang Tel-U</h4>
+                            <p>Kembali ke kampus - Akhir rute</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="route-stats">
+                    <div class="stat-item">
+                        <span class="stat-value">7</span>
+                        <span class="stat-label">Halte</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">~15</span>
+                        <span class="stat-label">Menit/Putaran</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">~3</span>
+                        <span class="stat-label">km</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Page -->
+        <div id="profile-page" class="page">
+            <header class="page-header">
+                <button class="back-btn" onclick="goBack()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <h1>Profil Saya</h1>
+                <div class="header-spacer"></div>
+            </header>
+
+            <div class="page-content">
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                    </div>
+                    <h2 id="profile-name">Nama Mahasiswa</h2>
+                    <p id="profile-nim">NIM: 1234567890</p>
+                </div>
+
+                <div class="profile-stats">
+                    <div class="stat-card">
+                        <span class="stat-number" id="trip-count">12</span>
+                        <span class="stat-name">Perjalanan</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="halte-visited">5</span>
+                        <span class="stat-name">Halte Dikunjungi</span>
+                    </div>
+                </div>
+
+                <div class="profile-menu">
+                    <button class="menu-item" onclick="navigateTo('history')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
+                        </svg>
+                        <span>Riwayat Perjalanan</span>
+                        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 18l6-6-6-6" />
+                        </svg>
+                    </button>
+                    <button class="menu-item" onclick="navigateTo('settings')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3" />
+                            <path
+                                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                        </svg>
+                        <span>Pengaturan</span>
+                        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 18l6-6-6-6" />
+                        </svg>
+                    </button>
+                    <button class="menu-item" onclick="navigateTo('help')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                            <line x1="12" y1="17" x2="12.01" y2="17" />
+                        </svg>
+                        <span>Bantuan</span>
+                        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 18l6-6-6-6" />
+                        </svg>
+                    </button>
+                    <button class="menu-item logout" onclick="logout()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                            <polyline points="16 17 21 12 16 7" />
+                            <line x1="21" y1="12" x2="9" y2="12" />
+                        </svg>
+                        <span>Keluar</span>
+                        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 18l6-6-6-6" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- History Page -->
+        <div id="history-page" class="page">
+            <header class="page-header">
+                <button class="back-btn" onclick="goBack()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <h1>Riwayat Perjalanan</h1>
+                <div class="header-spacer"></div>
+            </header>
+
+            <div class="page-content">
+                <div class="history-list" id="history-list">
+                    <!-- History items will be generated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Dashboard -->
+        <div id="admin-screen" class="screen">
+            <header class="admin-header">
+                <div class="admin-title">
+                    <h1>Dashboard Admin</h1>
+                    <p>TucTuc Tel-U Management</p>
+                </div>
+                <button class="logout-btn" onclick="logout()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                        <polyline points="16 17 21 12 16 7" />
+                        <line x1="21" y1="12" x2="9" y2="12" />
+                    </svg>
+                </button>
+            </header>
+
+            <div class="admin-content">
+                <!-- Stats Overview -->
+                <div class="admin-stats">
+                    <div class="admin-stat-card">
+                        <div class="stat-icon users">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                <circle cx="9" cy="7" r="4" />
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                            </svg>
+                        </div>
+                        <div class="stat-details">
+                            <span class="stat-value" id="admin-active-users">24</span>
+                            <span class="stat-label">Penumpang Aktif</span>
+                        </div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="stat-icon vehicles">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path
+                                    d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18 10l-2-4H8L6 10l-2.5 1.1C2.7 11.3 2 12.1 2 13v3c0 .6.4 1 1 1h2" />
+                                <circle cx="7" cy="17" r="2" />
+                                <circle cx="17" cy="17" r="2" />
+                            </svg>
+                        </div>
+                        <div class="stat-details">
+                            <span class="stat-value" id="admin-active-vehicles">3</span>
+                            <span class="stat-label">TucTuc Aktif</span>
+                        </div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="stat-icon trips">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                            </svg>
+                        </div>
+                        <div class="stat-details">
+                            <span class="stat-value" id="admin-today-trips">156</span>
+                            <span class="stat-label">Perjalanan Hari Ini</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Admin Tabs -->
+                <div class="admin-tabs">
+                    <button class="admin-tab active" data-tab="vehicles"
+                        onclick="switchAdminTab('vehicles')">Kendaraan</button>
+                    <button class="admin-tab" data-tab="schedules" onclick="switchAdminTab('schedules')">Jadwal</button>
+                    <button class="admin-tab" data-tab="passengers"
+                        onclick="switchAdminTab('passengers')">Penumpang</button>
+                </div>
+
+                <!-- Vehicles Tab -->
+                <div class="admin-tab-content active" id="vehicles-tab">
+                    <div class="vehicle-list">
+                        <div class="vehicle-card">
+                            <div class="vehicle-status online"></div>
+                            <div class="vehicle-info">
+                                <h4>TucTuc #01</h4>
+                                <p>Lokasi: Halte Sukabirus</p>
+                                <span class="vehicle-passengers">8 penumpang</span>
+                            </div>
+                            <div class="vehicle-actions">
+                                <button class="btn-small" onclick="trackVehicle(1)">Track</button>
+                            </div>
+                        </div>
+                        <div class="vehicle-card">
+                            <div class="vehicle-status online"></div>
+                            <div class="vehicle-info">
+                                <h4>TucTuc #02</h4>
+                                <p>Lokasi: Halte Gedung Telkom</p>
+                                <span class="vehicle-passengers">12 penumpang</span>
+                            </div>
+                            <div class="vehicle-actions">
+                                <button class="btn-small" onclick="trackVehicle(2)">Track</button>
+                            </div>
+                        </div>
+                        <div class="vehicle-card">
+                            <div class="vehicle-status online"></div>
+                            <div class="vehicle-info">
+                                <h4>TucTuc #03</h4>
+                                <p>Lokasi: Halte Yogya Sukapura</p>
+                                <span class="vehicle-passengers">4 penumpang</span>
+                            </div>
+                            <div class="vehicle-actions">
+                                <button class="btn-small" onclick="trackVehicle(3)">Track</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Schedules Tab -->
+                <div class="admin-tab-content" id="schedules-tab">
+                    <div class="schedule-management">
+                        <div class="schedule-header">
+                            <h3>Jadwal Operasional</h3>
+                            <button class="btn-small primary" onclick="addSchedule()">+ Tambah</button>
+                        </div>
+                        <div class="admin-schedule-list" id="admin-schedule-list">
+                            <!-- Schedules will be generated by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Passengers Tab -->
+                <div class="admin-tab-content" id="passengers-tab">
+                    <div class="passengers-list" id="passengers-list">
+                        <!-- Passengers will be generated by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notification Panel -->
+        <div id="notification-panel" class="notification-panel">
+            <div class="notification-header">
+                <h3>Notifikasi</h3>
+                <button class="close-btn" onclick="closeNotifications()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+            </div>
+            <div class="notification-list">
+                <div class="notification-item unread">
+                    <div class="notification-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
+                        </svg>
+                    </div>
+                    <div class="notification-content">
+                        <p>TucTuc #02 akan tiba di Halte Gedung Telkom dalam 2 menit</p>
+                        <span class="notification-time">5 menit lalu</span>
+                    </div>
+                </div>
+                <div class="notification-item unread">
+                    <div class="notification-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                            <polyline points="22 4 12 14.01 9 11.01" />
+                        </svg>
+                    </div>
+                    <div class="notification-content">
+                        <p>Perjalanan Anda berhasil tercatat. Terima kasih telah menggunakan TucTuc Tel-U!</p>
+                        <span class="notification-time">1 jam lalu</span>
+                    </div>
+                </div>
+                <div class="notification-item">
+                    <div class="notification-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="8" x2="12" y2="12" />
+                            <line x1="12" y1="16" x2="12.01" y2="16" />
+                        </svg>
+                    </div>
+                    <div class="notification-content">
+                        <p>Layanan TucTuc beroperasi normal hari ini pukul 06:00 - 21:00</p>
+                        <span class="notification-time">Kemarin</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notification -->
+        <div id="toast" class="toast">
+            <span id="toast-message"></span>
+        </div>
+
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- App JS -->
+    <script src="app.js"></script>
+</body>
+
+</html>
