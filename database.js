@@ -63,20 +63,43 @@ const initDB = () => {
     }
 };
 
+// In-memory cache for the database to support serverless environments (Vercel)
+let inMemoryDB = null;
+
 // Read database
 const readDB = () => {
+    // Return in-memory data if available (updated in current session)
+    if (inMemoryDB) return inMemoryDB;
+
     try {
-        const data = fs.readFileSync(DB_FILE, 'utf8');
-        return JSON.parse(data);
+        if (fs.existsSync(DB_FILE)) {
+            const data = fs.readFileSync(DB_FILE, 'utf8');
+            inMemoryDB = JSON.parse(data);
+            return inMemoryDB;
+        }
     } catch (error) {
-        initDB();
-        return JSON.parse(fs.readFileSync(DB_FILE, 'utf8'));
+        console.error('Read DB error:', error);
     }
+
+    // Fallback/Initialize if file read fails
+    initDB();
+    const data = fs.readFileSync(DB_FILE, 'utf8');
+    inMemoryDB = JSON.parse(data);
+    return inMemoryDB;
 };
 
 // Write database
 const writeDB = (data) => {
-    fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
+    // Always update in-memory cache
+    inMemoryDB = data;
+
+    try {
+        // Attempt to write to disk (will fail on Vercel, but that's okay)
+        fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
+    } catch (error) {
+        // Silently fail on read-only filesystem
+        console.warn('⚠️ Gagal menulis ke disk (Mungkin sistem Read-Only). Data hanya tersimpan di memori sementara.');
+    }
 };
 
 // Database helper functions
