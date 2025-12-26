@@ -17,8 +17,8 @@ const initDB = () => {
             users: [
                 {
                     id: 1,
-                    nama: 'Admin TucTuc',
-                    nim: 'ADMIN001',
+                    nama: 'Rayvan Alifarlo',
+                    nim: 'rayvanalifarlo@student.telkomuniversity.ac.id',
                     password: bcrypt.hashSync('admin123', 10),
                     faculty: 'Administrator',
                     role: 'admin',
@@ -26,6 +26,15 @@ const initDB = () => {
                 },
                 {
                     id: 2,
+                    nama: 'Muhammad Fiqri Habibi',
+                    nim: 'muhammadfiqrihabibi@student.telkomuniversity.ac.id',
+                    password: bcrypt.hashSync('admin123', 10),
+                    faculty: 'Administrator',
+                    role: 'admin',
+                    created_at: new Date().toISOString()
+                },
+                {
+                    id: 3,
                     nama: 'Demo User',
                     nim: '1234567890',
                     password: bcrypt.hashSync('password123', 10),

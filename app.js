@@ -287,9 +287,10 @@ async function handleSignUp(e) {
             if (data.success) {
                 currentUser = {
                     id: data.user.id,
-                    name: nama,
-                    nim: email,
-                    faculty: data.user.faculty
+                    name: data.user.nama,
+                    nim: data.user.nim,
+                    faculty: data.user.faculty,
+                    role: data.user.role // Simpan role dari server
                 };
                 showToast('Registrasi berhasil!');
                 loginSuccess();
@@ -322,15 +323,22 @@ function loginSuccess() {
     // document.getElementById('card-name').textContent = currentUser.name;
     // document.getElementById('card-nim').textContent = currentUser.nim;
 
-    // Show main screen
+    // Show main or admin screen based on role
     document.getElementById('login-screen').classList.remove('active');
-    document.getElementById('main-screen').classList.add('active');
 
-    // Initialize map after screen is visible
-    setTimeout(() => {
-        initMap();
-        startTucTucAnimation();
-    }, 300);
+    if (currentUser.role === 'admin') {
+        isAdmin = true;
+        document.getElementById('admin-screen').classList.add('active');
+        initAdminDashboard();
+    } else {
+        isAdmin = false;
+        document.getElementById('main-screen').classList.add('active');
+        // Initialize map after screen is visible
+        setTimeout(() => {
+            initMap();
+            startTucTucAnimation();
+        }, 300);
+    }
 
     // Load data from API if backend is enabled
     if (USE_BACKEND) {
@@ -349,17 +357,8 @@ function togglePassword(fieldId) {
 }
 
 function showAdminLogin() {
-    isAdmin = true;
-    currentUser = {
-        name: 'Admin TucTuc',
-        nim: 'ADMIN001',
-        role: 'admin'
-    };
-
-    document.getElementById('login-screen').classList.remove('active');
-    document.getElementById('admin-screen').classList.add('active');
-
-    showToast('Login sebagai Admin berhasil!');
+    showToast('Silakan login menggunakan akun Developer untuk akses Admin.');
+    switchAuthTab('signin');
 }
 
 function logout() {
