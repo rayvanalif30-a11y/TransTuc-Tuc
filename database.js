@@ -8,41 +8,29 @@ const path = require('path');
 const bcrypt = require('bcryptjs');
 
 // Database file path
+// Database file path
 const DB_FILE = path.join(__dirname, 'data.json');
+
+// Default admin accounts to ensure exist
+const DEFAULT_ADMINS = [
+    {
+        nama: 'Rayvan Alifarlo',
+        nim: 'rayvanalifarlo@student.telkomuniversity.ac.id',
+        password: 'admin123'
+    },
+    {
+        nama: 'Muhammad Fiqri Habibi',
+        nim: 'muhammadfiqrihabibi@student.telkomuniversity.ac.id',
+        password: 'admin123'
+    }
+];
 
 // Initialize database structure
 const initDB = () => {
+    let db;
     if (!fs.existsSync(DB_FILE)) {
-        const initialData = {
-            users: [
-                {
-                    id: 1,
-                    nama: 'Rayvan Alifarlo',
-                    nim: 'rayvanalifarlo@student.telkomuniversity.ac.id',
-                    password: bcrypt.hashSync('admin123', 10),
-                    faculty: 'Administrator',
-                    role: 'admin',
-                    created_at: new Date().toISOString()
-                },
-                {
-                    id: 2,
-                    nama: 'Muhammad Fiqri Habibi',
-                    nim: 'muhammadfiqrihabibi@student.telkomuniversity.ac.id',
-                    password: bcrypt.hashSync('admin123', 10),
-                    faculty: 'Administrator',
-                    role: 'admin',
-                    created_at: new Date().toISOString()
-                },
-                {
-                    id: 3,
-                    nama: 'Demo User',
-                    nim: '1234567890',
-                    password: bcrypt.hashSync('password123', 10),
-                    faculty: 'Fakultas Informatika',
-                    role: 'mahasiswa',
-                    created_at: new Date().toISOString()
-                }
-            ],
+        db = {
+            users: [],
             schedules: [
                 { id: 1, time: '06:00', period: 'AM', halte: 'Gedung Telkom', vehicle: 'TucTuc #01', status: 'available' },
                 { id: 2, time: '06:15', period: 'AM', halte: 'Sukabirus', vehicle: 'TucTuc #02', status: 'available' },
@@ -60,15 +48,41 @@ const initDB = () => {
                 { id: 2, name: 'TucTuc #02', status: 'online', current_halte: 'Gedung Telkom', passengers: 12, lat: -6.9733, lng: 107.6307 },
                 { id: 3, name: 'TucTuc #03', status: 'online', current_halte: 'Yogya Sukapura', passengers: 4, lat: -6.9772, lng: 107.6335 }
             ],
-            trips: [
-                { id: 1, user_id: 2, vehicle: 'TucTuc #02', halte_from: 'Gedung Telkom', halte_to: 'Sukabirus', trip_date: new Date().toISOString() },
-                { id: 2, user_id: 2, vehicle: 'TucTuc #01', halte_from: 'Sukapura', halte_to: 'Gedung Telkom', trip_date: new Date().toISOString() },
-                { id: 3, user_id: 2, vehicle: 'TucTuc #03', halte_from: 'MB Tel-U', halte_to: 'Yogya Sukapura', trip_date: new Date().toISOString() }
-            ]
+            trips: []
         };
+    } else {
+        const data = fs.readFileSync(DB_FILE, 'utf8');
+        db = JSON.parse(data);
+    }
 
-        fs.writeFileSync(DB_FILE, JSON.stringify(initialData, null, 2));
-        console.log('✅ Database initialized with sample data');
+    // Ensure Default Admins exist
+    DEFAULT_ADMINS.forEach(adminInfo => {
+        const existingIdx = db.users.findIndex(u => u.nim === adminInfo.nim);
+        if (existingIdx === -1) {
+            // Add new admin
+            db.users.push({
+                id: db.users.length > 0 ? Math.max(...db.users.map(u => u.id)) + 1 : 1,
+                nama: adminInfo.nama,
+                nim: adminInfo.nim,
+                password: bcrypt.hashSync(adminInfo.password, 10),
+                faculty: 'Administrator',
+                role: 'admin',
+                created_at: new Date().toISOString()
+            });
+        } else {
+            // Force update existing account to Admin role and password
+            db.users[existingIdx].role = 'admin';
+            db.users[existingIdx].password = bcrypt.hashSync(adminInfo.password, 10);
+            db.users[existingIdx].nama = adminInfo.nama;
+        }
+    });
+
+    try {
+        fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2));
+        console.log('✅ Database synchronized with Admin accounts');
+    } catch (e) {
+        // Fallback for Read-Only
+        inMemoryDB = db;
     }
 };
 
